@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html ng-app="jobPos">
+<head>
+	<meta charset="utf-8">
+	<title>title</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="css/app.css" />  
+	<script src="node_modules/angular/angular.js"></script>
+
+</head>
+<body ng-controller="PosCtrl">
+
+	
+	<div class="container">
+		<section class = "inputData">
+			<div class="row">
+				<div class="col-sm-6 col-sm-offset-2">
+					<div class="form-group">
+						<label for="inputName" class="col-sm-4 control-label">Наименование объекта:</label>
+						<div class="col-sm-8">
+						<textarea class="form-control input-sm" rows="1" placeholder="Наименование объекта" ></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<p>Hello</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6 col-sm-offset-2">
+					<label for="inputDate" class="col-sm-4 control-label">Начало строительства</label>
+					<div class="col-sm-4">
+						<input type="month" class="form-control input-sm" id="inputName">
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<p>Hello</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6 col-sm-offset-2">
+					<label for="inputDate" class="col-sm-4 control-label">Продолжительность</label>
+					<div class="col-sm-2">
+						<input type="text" class="form-control input-sm" ng-model="timeBuilding" ng-change="changeMonth()" id="inputMonth" placeholder="мес">
+					</div>
+					<p>месяцев</p>
+				</div>
+				<div class="col-sm-4">
+					<p>Hello</p>
+				</div>
+			</div>
+		</section>
+
+
+<section class = "tableKalendarnii">
+		<div class="row">
+			<div class="col-sm-6 col-sm-offset-2">
+				<table class="table table-bordered" id="tableKal" ng-click="clickTable($event)">
+					<tr>
+						<td rowspan="3">№
+							<br>п/п</br>
+						</td>
+						<td rowspan="3">Наименование объектов и  видов работ</td>
+						<td colspan="2">Сметная стоимостьтыс. руб. (BRN)</td>
+						<td colspan={{2}}>Распределение капвложений по периодам строительства</td>
+					</tr>
+					<tr>
+						<td rowspan="2">Всего</td>
+						<td rowspan="2">СМР</td>
+						<td colspan={{1}}>2017</td>
+					</tr>
+					<tr>
+						<td ng-repeat="timeBuilding in timeBuilding">{{timeBuilding}}</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td >Распределение капвло-жений и объемов СМР</td>
+						<td >100%</td>
+						<td >100%</td>
+					</tr>
+				</table>
+			</div>
+			<div class="col-sm-4">
+				<p>Hello</p>
+			</div>
+		</div>
+</section>
+
+
+
+
+		<div class="row">
+			<div class="col-sm-1 col-sm-offset-1">
+				<p>Hello</p>
+			</div>
+			<div class="col-sm-4">
+				<input type="text" name="name">
+			</div>
+			<div class="col-sm-4">
+				<p>Hello</p>
+			</div>
+		</div>
+
+
+
+		<div class="row">
+			<div class="col-sm-1 col-sm-offset-1">
+				<p>Hello</p>
+			</div>
+			<div class="col-sm-4">
+				<table class="table table-bordered">
+					<tr>
+						<td>Наименование</td>
+						<td >Ед.измерен.</td>
+						<td >Количество на период строительства</td>
+					</tr>
+					<tr>
+						<td >
+							<br>Трудоемкость работ по сводному сметному расчету
+							<br>Кол-во работающих, (Тч-час:8час:6,5мес:22дн)
+							<br>в т.ч. рабочих,
+							<br>ИТР и МОП /15,5% от общего количества/
+						</td>
+						<td >
+							<br>чел-час.
+
+
+						</td>
+						<td >64528</td>
+
+
+					</tr>
+					
+				</table>
+
+			</div>
+			<div class="col-sm-4">
+				<p>Hello</p>
+			</div>
+		</div>
+
+
+
+
+
+
+
+	</div>
+
+
+
+	<script src="controller.js"></script>
+</body>
+</html>
