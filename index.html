@@ -30,7 +30,7 @@
 				<div class="col-sm-6 col-sm-offset-2">
 					<label for="inputDate" class="col-sm-4 control-label">Начало строительства</label>
 					<div class="col-sm-4">
-						<input type="month" class="form-control input-sm" id="inputName">
+						<input type="month" ng-model="dateBeginBuilding" class="form-control input-sm" id="inputName">
 					</div>
 				</div>
 				<div class="col-sm-4">
@@ -62,15 +62,15 @@
 						</td>
 						<td rowspan="3">Наименование объектов и  видов работ</td>
 						<td colspan="2">Сметная стоимостьтыс. руб. (BRN)</td>
-						<td colspan={{2}}>Распределение капвложений по периодам строительства</td>
+						<td colspan={{timeBuilding}}>Распределение капвложений по периодам строительства</td>
 					</tr>
 					<tr>
 						<td rowspan="2">Всего</td>
 						<td rowspan="2">СМР</td>
-						<td colspan={{1}}>2017</td>
+						<td ng-repeat="Years in tableYears" colspan={{Years.colm}}>{{2017}}</td>
 					</tr>
 					<tr>
-						<td ng-repeat="timeBuilding in timeBuilding">{{timeBuilding}}</td>
+						<td ng-repeat="Month in tableMonth">{{Month}}</td>
 					</tr>
 					<tr>
 						<td></td>
