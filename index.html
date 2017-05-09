@@ -54,37 +54,44 @@
 
 <section class = "tableKalendarnii">
 		<div class="row">
-			<div class="col-sm-6 col-sm-offset-2">
+			<div class="col-sm-8 col-sm-offset-1">
 				<table class="table table-bordered" id="tableKal" ng-click="clickTable($event)">
 					<tr>
-						<td rowspan="3">№
-							<br>п/п</br>
-						</td>
+						<td rowspan="3">№ п/п</td>
 						<td rowspan="3">Наименование объектов и  видов работ</td>
 						<td colspan="2">Сметная стоимостьтыс. руб. (BRN)</td>
-						<td colspan={{timeBuilding}}>Распределение капвложений по периодам строительства</td>
-					</tr>
+						<td colspan={{timeBuilding}} >Распределение капвложений по периодам строительства</td>
+					</tr> 
 					<tr>
 						<td rowspan="2">Всего</td>
 						<td rowspan="2">СМР</td>
-						<td ng-repeat="Years in tableYears" colspan={{Years.colm}}>{{2017}}</td>
+						<td ng-repeat="years in tableYears  track by $index" 
+						colspan={{years.coldspan}}>{{years.year}}</td>
 					</tr>
 					<tr>
-						<td ng-repeat="Month in tableMonth">{{Month}}</td>
+						<td ng-repeat="Month in tableMonth track by $index">{{Month}}</td>
 					</tr>
 					<tr>
-						<td></td>
+						<td> </td>
+						<td >Подготовка территории</td>
+						<td >бабки</td>
+						<td >бабло</td>
+						<td ng-repeat="Month in tableMonth track by $index">$$</td>
+					</tr>
+					<tr>
+						<td> </td>
 						<td >Распределение капвло-жений и объемов СМР</td>
 						<td >100%</td>
 						<td >100%</td>
+						<td ng-repeat="Month in tableMonth track by $index" id="number-{{$index}}">100%</td>
 					</tr>
 				</table>
 			</div>
-			<div class="col-sm-4">
-				<p>Hello</p>
-			</div>
 		</div>
 </section>
+
+
+
 
 
 
@@ -94,7 +101,7 @@
 				<p>Hello</p>
 			</div>
 			<div class="col-sm-4">
-				<input type="text" name="name">
+				<input type="text" ng-click="last($event)" name="name">
 			</div>
 			<div class="col-sm-4">
 				<p>Hello</p>
@@ -146,6 +153,12 @@
 
 
 	</div>
+
+
+
+
+
+
 
 
 
