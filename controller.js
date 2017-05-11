@@ -60,7 +60,6 @@ console.log($scope);
 
 //---------календарный план таблица CLICK
 $scope.clickTable = function ($event){
-  console.log(document.getElementById("number-0"));
   if ($event.target.localName !== "td" ) {
     console.log('return');
     return false;
@@ -124,30 +123,75 @@ $scope.changeMonth = function (){
 
 
 
-$scope.last = function ($event){
-
-$scope.tableMonth.forEach( function(element, index) {
-
-let elem = document.getElementById("number-"+index);
-console.log(elem);
-
-console.log(index);
-
-
-//    let elem=getElementById("number-"+index); 
-
-// console.log(elem);
-   });
 
 
 
 
-//   angular.array.forEach( function($scope.tableMonth, index) {
+
+
+
+
+$scope.last = function (event, a ="tablePercent"){
+
+
+  console.log(a);
+
+// elemnti.array.forEach( function(element, index) {
+//    console.log('elemnti');
+// });
+
+// Array.from(document.getElementsByClassName(a)).forEach(function(item) {
+//    console.log(item.id);
+// });
+
+
+let elemlist = document.getElementsByClassName(a); //какойто начальный класс
+let result = parseInt(document.getElementById(a).innerHTML);
+
+
+console.log(result/elemlist.length.toFixed(2));
+
+if (result !== NaN) {
+
+  for (var item of elemlist) {
     
-//    let elem=getElementById("number-"+index); 
+    if (item.innerHTML !== 0) {
 
-// console.log(elem);
-//   });
+    }
+
+
+
+
+
+
+
+
+
+
+    item.innerHTML = (result/elemlist.length).toFixed(2);
+    console.log(item.innerHTML);
+  }
+
+
+}
+
+
+
+
+
+console.log(elemlist);
+
+//   $scope.tableMonth.forEach( function(element, index) {
+
+//     let elem = document.getElementById(a+index);
+//     console.log(elem.innerHTML);
+//     console.log(index);
+
+
+  // });
+
+
+
 
 };
 
@@ -176,6 +220,16 @@ function keyPressKeyboard(e) {
 
 
 
+
+function checkTable() {
+
+
+
+
+
+
+
+}
 
 
 

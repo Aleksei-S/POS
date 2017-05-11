@@ -82,8 +82,9 @@
 						<td> </td>
 						<td >Распределение капвло-жений и объемов СМР</td>
 						<td >100%</td>
-						<td >100%</td>
-						<td ng-repeat="Month in tableMonth track by $index" id="number-{{$index}}">100%</td>
+						<td id="tablePercent" data-CMP>100%</td>
+						<td class="tablePercent" ng-repeat="Month in tableMonth track by $index" id="tablePercent{{$index}}"
+						 data-table>{{value}}</td>
 					</tr>
 				</table>
 			</div>
