@@ -7,9 +7,9 @@
 	<link rel="stylesheet" href="css/app.css" />  
 	<script src="node_modules/angular/angular.js"></script>
 
+
 </head>
 <body ng-controller="PosCtrl">
-
 	
 	<div class="container">
 		<section class = "inputData">
@@ -18,7 +18,7 @@
 					<div class="form-group">
 						<label for="inputName" class="col-sm-4 control-label">Наименование объекта:</label>
 						<div class="col-sm-8">
-						<textarea class="form-control input-sm" rows="1" placeholder="Наименование объекта" ></textarea>
+							<textarea class="form-control input-sm" rows="1" placeholder="Наименование объекта" ></textarea>
 						</div>
 					</div>
 				</div>
@@ -41,7 +41,7 @@
 				<div class="col-sm-6 col-sm-offset-2">
 					<label for="inputDate" class="col-sm-4 control-label">Продолжительность</label>
 					<div class="col-sm-2">
-						<input type="text" class="form-control input-sm" ng-model="timeBuilding" ng-change="changeMonth()" id="inputMonth" placeholder="мес">
+						<input type="text" class="form-control input-sm" ng-model="timeBuilding"  placeholder="мес">
 					</div>
 					<p>месяцев</p>
 				</div>
@@ -52,44 +52,59 @@
 		</section>
 
 
-<section class = "tableKalendarnii">
-		<div class="row">
-			<div class="col-sm-8 col-sm-offset-1">
-				<table class="table table-bordered" id="tableKal" ng-click="clickTable($event)">
-					<tr>
-						<td rowspan="3">№ п/п</td>
-						<td rowspan="3">Наименование объектов и  видов работ</td>
-						<td colspan="2">Сметная стоимостьтыс. руб. (BRN)</td>
-						<td colspan={{timeBuilding}} >Распределение капвложений по периодам строительства</td>
-					</tr> 
-					<tr>
-						<td rowspan="2">Всего</td>
-						<td rowspan="2">СМР</td>
-						<td ng-repeat="years in tableYears  track by $index" 
-						colspan={{years.coldspan}}>{{years.year}}</td>
-					</tr>
-					<tr>
-						<td ng-repeat="Month in tableMonth track by $index">{{Month}}</td>
-					</tr>
-					<tr>
-						<td> </td>
-						<td >Подготовка территории</td>
-						<td >бабки</td>
-						<td >бабло</td>
-						<td ng-repeat="Month in tableMonth track by $index">$$</td>
-					</tr>
-					<tr>
-						<td> </td>
-						<td >Распределение капвло-жений и объемов СМР</td>
-						<td >100%</td>
-						<td id="tablePercent" data-CMP>100%</td>
-						<td class="tablePercent" ng-repeat="Month in tableMonth track by $index" id="tablePercent{{$index}}"
-						 data-table>{{value}}</td>
-					</tr>
-				</table>
+		<section class = "tableKalendarnii">
+			<div class="row">
+				<div class="col-sm-8 col-sm-offset-1">
+					<table class="table table-bordered" id="tableKal" ng-click="clickTable($event)">
+						<tr>
+							<td rowspan="3">№ п/п</td>
+							<td rowspan="3">Наименование объектов и  видов работ</td>
+							<td colspan="2">Сметная стоимостьтыс. руб. (BRN)</td>
+							<td colspan={{timeBuilding}} >Распределение капвложений по периодам строительства</td>
+						</tr> 
+						<tr>
+							<td rowspan="2">Всего</td>
+							<td rowspan="2">СМР</td>
+							<td ng-repeat="years in tableYears  track by $index" 
+							colspan={{years.coldspan}}>{{years.year}}</td>
+						</tr>
+						<tr>
+							<td ng-repeat="Month in tableMonth track by $index">{{Month}}</td>
+						</tr>
+
+
+
+						<tr ng-repeat="Row in table">
+							<td ng-model="Row[key]" ng-repeat="(key, value)  in Row" ng-change="change()" ng-click="removeTask(key, value)" on-update="updateHero(hero, prop, value)">{{rw}}</td>
+						</tr>
+
+
+
+
+
+
+						<tr>
+							<td> </td>
+							<td >Распределение капвло-жений и объемов СМР</td>
+							<td >100%</td>
+							<td id="tablePercent" data-CMP>100%</td>
+							<td class="tablePercent" ng-repeat="Month in tableMonth track by $index" id="tablePercent{{$index}}"
+							data-tableChangeLastCell = "true" data-ChangeCell = "true">{{value}}</td>
+						</tr>
+
+						<tr ng-repeat="user in users">
+							<td>{{user.name}}</td>
+							<td ng-repeat="ag in user.age">{{ag.me}}</td>
+							<td>{{user.location}}</td>
+						</tr>
+
+
+
+
+					</table>
+				</div>
 			</div>
-		</div>
-</section>
+		</section>
 
 
 
