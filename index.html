@@ -4,13 +4,15 @@
 	<meta charset="utf-8">
 	<title>title</title>
 	<link rel="stylesheet" href="css/bootstrap.css">
-	<link rel="stylesheet" href="css/app.css" />  
+	<link rel="stylesheet" href="css/app.css" />
 	<script src="node_modules/angular/angular.js"></script>
 
 
 </head>
 <body ng-controller="PosCtrl">
-	
+
+	<div id="app"></div>
+
 	<div class="container">
 		<section class = "inputData">
 			<div class="row">
@@ -29,7 +31,7 @@
 			<div class="row">
 				<div class="col-sm-6 col-sm-offset-2">
 					<label for="inputDate" class="col-sm-4 control-label">Начало строительства</label>
-					<div class="col-sm-4">
+					<div class="col-sm-5">
 						<input type="month" ng-model="dateBeginBuilding" class="form-control input-sm" id="inputName">
 					</div>
 				</div>
@@ -41,7 +43,7 @@
 				<div class="col-sm-6 col-sm-offset-2">
 					<label for="inputDate" class="col-sm-4 control-label">Продолжительность</label>
 					<div class="col-sm-2">
-						<input type="text" class="form-control input-sm" ng-model="timeBuilding"  placeholder="мес">
+						<input type="text" class="form-control input-sm" ng-model="timeBuilding" placeholder="мес">
 					</div>
 					<p>месяцев</p>
 				</div>
@@ -58,47 +60,29 @@
 					<table class="table table-bordered" id="tableKal" ng-click="clickTable($event)">
 						<tr>
 							<td rowspan="3">№ п/п</td>
-							<td rowspan="3">Наименование объектов и  видов работ</td>
+							<td rowspan="3">Наименование объектов и видов работ</td>
 							<td colspan="2">Сметная стоимостьтыс. руб. (BRN)</td>
-							<td colspan={{timeBuilding}} >Распределение капвложений по периодам строительства</td>
+							<td colspan={{timeBuilding}} ng-show="timeBuilding > 0">Распределение капвложений по периодам строительства</td>
 						</tr> 
 						<tr>
 							<td rowspan="2">Всего</td>
 							<td rowspan="2">СМР</td>
-							<td ng-repeat="years in tableYears  track by $index" 
-							colspan={{years.coldspan}}>{{years.year}}</td>
+							<td ng-repeat="years in arrayYearsColdspan track by $index" 
+							colspan={{years.coldspan}} ng-show="timeBuilding > 0">{{years.year}}</td>
 						</tr>
 						<tr>
-							<td ng-repeat="Month in tableMonth track by $index">{{Month}}</td>
-						</tr>
-
-
-
-						<tr ng-repeat="Row in table">
-							<td ng-model="Row[key]" ng-repeat="(key, value)  in Row" ng-change="change()" ng-click="removeTask(key, value)" on-update="updateHero(hero, prop, value)">{{rw}}</td>
+							<td ng-repeat="Month in arrayMonth track by $index">{{Month}}</td>
 						</tr>
 
 
 
 
-
-
-						<tr>
-							<td> </td>
-							<td >Распределение капвло-жений и объемов СМР</td>
-							<td >100%</td>
-							<td id="tablePercent" data-CMP>100%</td>
-							<td class="tablePercent" ng-repeat="Month in tableMonth track by $index" id="tablePercent{{$index}}"
-							data-tableChangeLastCell = "true" data-ChangeCell = "true">{{value}}</td>
+						<tr ng-repeat="Row in table track by $index">
+						<td >{{$index+1}}</td>
+							<td ng-repeat="(key, value) in Row" ng-click="clickTableRow($event, Row, key, value); gg=$event.target;">{{value}}
+								<input type="text" class="form-control input-sm" id="edit" ng-model="inputValue" ng-if="showInput" ng-blur="inputTableBlur()" >
+							</td>
 						</tr>
-
-						<tr ng-repeat="user in users">
-							<td>{{user.name}}</td>
-							<td ng-repeat="ag in user.age">{{ag.me}}</td>
-							<td>{{user.location}}</td>
-						</tr>
-
-
 
 
 					</table>
@@ -153,7 +137,7 @@
 
 
 					</tr>
-					
+
 				</table>
 
 			</div>
@@ -181,3 +165,4 @@
 	<script src="controller.js"></script>
 </body>
 </html>
+
