@@ -9,8 +9,8 @@ jobPos.controller('PosCtrl', ['$scope', function($scope){
 
 $scope.dateBeginBuilding = new Date(); //дата начала строительства
 $scope.timeBuilding = new Number(); // продолжительность строительства
-$scope.table = new Array();
-$scope.arrayMonth = new Array();
+$scope.table = new Array();          
+$scope.arrayMonth = new Array();      
 $scope.arrayYearsColdspan = new Array();
 
 
@@ -33,24 +33,56 @@ $scope.inputTableBlur = function (){
   this.$parent.showInput = false;
   this.$parent.$parent.Row[this.$parent.key] = this.inputValue;
   this.$parent.value = this.inputValue;
+  //checkRow (this.$parent.$parent.Row);
   console.log(this.$parent.$parent.Row);
 };
 
 
-// function tableRow (arr, name="", total="0", CMP="0") {
-//   this.name = name;
-//   this.total = total;
-//   this.CMP = CMP;
-//   for (var i = 0; i < arr.length; i++) {
-//     this[arr[i]] = "";
-//   } 
+$scope.$watch('table', function(newValue, oldValue, scope) {
+ if (newValue == oldValue) return;
+    //  console.log(newValue);
+    // console.log(scope);
+    //  console.log("scope222");
+  }, true);
+
+
+
+
+// function checkRow (tablerow) {
+//   let result = tablerow.total;
+//   let num = $scope.arrayMonth.length - 1;
+//   for (var i = 0; i < num; i++) {
+//     result = result - tablerow[$scope.arrayMonth[i]];
+//   }
+
+//   tablerow[$scope.arrayMonth[num]] = result;
+
+//   console.log(result);
+//   console.log($scope.arrayMonth);
+//   console.log($scope.arrayMonth.length);
 // }
 
 
+
+
+
+
+
+
+function tableRow (arr, name="", total="0", CMP="0") {
+  this.name = name;
+  this.total = total;
+  this.CMP = CMP;
+  for (var i = 0; i < arr.length; i++) {
+    this[arr[i]] = "";
+  } 
+}
+
+
 $scope.$watchGroup(['timeBuilding', 'dateBeginBuilding'], function(newValue, oldValue, scope) {
-  console.log($scope.table +'        $scope.table ');
+  let oldTable = $scope.table;   //save old
   $scope.arrayMonth =  Array(); //ОЧИСТИТЬ
-  $scope.arrayYearsColdspan =  Array();
+  $scope.arrayYearsColdspan =  Array(); //ОЧИСТИТЬ
   $scope.table = [];               //ОЧИСТИТЬ  !!!!!!!!!!!!!!!!!NONONONO
   let timeMonth = new Date($scope.dateBeginBuilding.getFullYear(), $scope.dateBeginBuilding.getMonth(), 1, 0, 0, 0, 0);
   let num = $scope.dateBeginBuilding.getMonth();
@@ -69,6 +101,7 @@ $scope.$watchGroup(['timeBuilding', 'dateBeginBuilding'], function(newValue, old
     timeMonth.setMonth(num++);
     $scope.arrayMonth[i] = timeMonth.toString().substring(4,7);
     let yearNext = timeMonth.toString().substring(11,15);
+
     if (Year == yearNext) {
       countColdspan++;
     }else{ 
@@ -76,33 +109,76 @@ $scope.$watchGroup(['timeBuilding', 'dateBeginBuilding'], function(newValue, old
       Year = yearNext; 
       countColdspan = 1;
     }
+
   }
   $scope.arrayYearsColdspan.push(new Obj(Year,countColdspan));
-  $scope.createTable($scope.arrayMonth);
+
+  $scope.createTable(oldTable);
 });
 
 
 
+$scope.addRow = function (index){
+  $scope.table.splice(index, 0, new tableRow($scope.arrayMonth));
+};
+
+$scope.deleteRow = function (index){
+ $scope.table.splice(index, 1);
+};
+
+$scope.switchRow = function (index, str){
+ let row = $scope.table[index];
+ //let rowSwitch = {};
+ let num = "";
+
+ if (str == "up") {
+  num = index - 1;
+} else {
+  num = index + 1;
+   // rowSwitch = $scope.table[index+1];
+   // console.log(rowSwitch);
+ }
+
+
+if (0 < num && num > ($scope.table.length - 2)) {
+console.log("ggggggggggggggggggg");
+
+}
+
+
+ // if (rowSwitch !== undefined) {
+ //   $scope.table.splice(index, 1, rowSwitch);
+ // }
+
+};
 
 
 
 
+  // var temp:* = this[toIndex];
+  // this[toIndex] = this[fromIndex];
+  // this[fromIndex] = temp;
 
 
-$scope.createTable = function (arrayMonth){
-  $scope.row = new tableRow($scope.arrayMonth);
-  $scope.table.push($scope.row);
-  $scope.row = new tableRow($scope.arrayMonth);
-  $scope.table.push($scope.row);
 
+//switchRow($index,'down')
+
+
+
+$scope.createTable = function (oldTable){
+  if (oldTable.length == 0) {
+   $scope.table.push(new tableRow($scope.arrayMonth));
+   $scope.table.push(new tableRow($scope.arrayMonth));
   ////////////////////ПРОЦЕНТЫ////////////////////////
-  $scope.row = new tableRow(arrayMonth, "Распределение капвложений по месяцам", "100%", "100%");
-  $scope.table.push($scope.row);
+  let row = new tableRow($scope.arrayMonth, "Распределение капвложений по месяцам", "100%", "100%");
+  $scope.table.push(row);
+} else {
+  for (var i = 0; i < oldTable.length; i++) {
+    $scope.table.push(new tableRow($scope.arrayMonth, oldTable[i].name,oldTable[i].total,oldTable[i].CMP));
+  }
 
-$scope.$watch('row', function(newValue, oldValue, scope) {
-  console.log(newValue+'        this.newValue');
-  console.log(newValue+'        this.oldValue');
-});
+
+}
 
 }
 
@@ -110,26 +186,27 @@ $scope.$watch('row', function(newValue, oldValue, scope) {
 
 
 
-function tableRow (arr, name="", total="0", CMP="0") {
-  this.name = name;
-  this.total = total;
-  this.CMP = CMP;
-  for (var i = 0; i < arr.length; i++) {
-    this[arr[i]+i] = "";
-  } 
-}
 
 
 
-// $scope.$watch('row', function(newValue, oldValue, scope) {
-//   console.log(newValue+'        this.newValue');
-//   console.log(newValue+'        this.oldValue');
-// });
+
+
+
+
+
 
 
 $scope.last = function (){
-  $scope.table.pop();
+  // var g = new tableRow (["may","apr"], "kykyky", "500", "100");
+  // var f = new makeTableRow(["gg0","gg1","gg2","gg3"],"name", "total", "CMP");
+
+
+
+
+  // $scope.table.pop();
 }
+
+
 
 
 
@@ -146,69 +223,6 @@ $scope.last = function (){
 
 
 
-
-// let rowtable = function (arrayMonth) {
-
-// let arrayRowtable = new Array(); //ОЧИСТИТЬ
-
-// let Obj = function (Month,coldspan) {
-// this.Month = Month;
-// this.coldspan = coldspan;
-// };
-
-// for (var i = 0; i < arrayMonth.length; i++) {
-// arrayMonth[i] = new Obj(arrayMonth[i],"0");
-// }
-
-// console.log(arrayRowtable);
-// };
-
-
-
-
-
-
-
-
-
-// $scope.changeMonth = function (){
-
-// $scope.tableMonth = new Array(); //ОЧИСТИТЬ
-// $scope.tableYears = new Array();
-
-// let timeContinie = parseInt($scope.timeBuilding);
-// let Year = $scope.dateBeginBuilding.getFullYear();
-// let timeMonth = new Date(Year, $scope.dateBeginBuilding.getMonth(), 1, 0, 0, 0, 0);
-// let num = $scope.dateBeginBuilding.getMonth();
-
-
-// let count = 0;
-// let Obj = function (year, coldspan) {
-// this.year = year;
-// this.coldspan = coldspan;
-// };
-
-// for (var i = 0; i < timeContinie; i++) {
-
-// if(num == 13){
-// num = 1;
-// }
-
-// timeMonth.setMonth(num++);
-
-// $scope.tableMonth[i] = timeMonth.toString().substring(4,7);
-// let yearNext = timeMonth.toString().substring(11,15);
-
-// if (Year == yearNext) {
-// count++;
-// }else{ 
-// $scope.tableYears.push(new Obj(Year,count));
-// Year = yearNext; 
-// count = 1;
-// }
-// }
-
-// $scope.tableYears.push(new Obj(Year,count));
 
 
 

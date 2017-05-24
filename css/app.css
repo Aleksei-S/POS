@@ -24,3 +24,21 @@ body .inputData .row .col-sm-6 input {
 body .inputData .row .col-sm-6 textarea {
   margin: 3px;
 }
+body table {
+  font: Trebuchet MS;
+  padding: 0px;
+  border-left: none!important;
+  border-bottom: none!important;
+  border-top: none!important;
+  border-right: none!important;
+}
+body th {
+  color: red;
+  border-left: none!important;
+  border-bottom: none!important;
+  border-top: none!important;
+  border-right: none!important;
+}
+body .tableKalendarnii {
+  padding-top: 30px;
+}
