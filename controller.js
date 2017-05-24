@@ -118,8 +118,8 @@ $scope.$watchGroup(['timeBuilding', 'dateBeginBuilding'], function(newValue, old
 
 
 
-$scope.addRow = function (index){
-  $scope.table.splice(index, 0, new tableRow($scope.arrayMonth));
+$scope.addRow = function (){
+  $scope.table.splice(0, 0, new tableRow($scope.arrayMonth));
 };
 
 $scope.deleteRow = function (index){
@@ -128,40 +128,23 @@ $scope.deleteRow = function (index){
 
 $scope.switchRow = function (index, str){
  let row = $scope.table[index];
- //let rowSwitch = {};
  let num = "";
 
  if (str == "up") {
   num = index - 1;
 } else {
   num = index + 1;
-   // rowSwitch = $scope.table[index+1];
-   // console.log(rowSwitch);
- }
-
-
-if (0 < num && num > ($scope.table.length - 2)) {
-console.log("ggggggggggggggggggg");
-
 }
 
-
- // if (rowSwitch !== undefined) {
- //   $scope.table.splice(index, 1, rowSwitch);
- // }
+if (-1 < num && num < ($scope.table.length - 1)) {
+  $scope.table.splice(index, 1,  $scope.table[num]);
+  $scope.table.splice(num, 1,  row);
+}
 
 };
 
 
 
-
-  // var temp:* = this[toIndex];
-  // this[toIndex] = this[fromIndex];
-  // this[fromIndex] = temp;
-
-
-
-//switchRow($index,'down')
 
 
 
@@ -172,21 +155,12 @@ $scope.createTable = function (oldTable){
   ////////////////////ПРОЦЕНТЫ////////////////////////
   let row = new tableRow($scope.arrayMonth, "Распределение капвложений по месяцам", "100%", "100%");
   $scope.table.push(row);
-} else {
-  for (var i = 0; i < oldTable.length; i++) {
+  } else {
+    for (var i = 0; i < oldTable.length; i++) {
     $scope.table.push(new tableRow($scope.arrayMonth, oldTable[i].name,oldTable[i].total,oldTable[i].CMP));
+    }
   }
-
-
 }
-
-}
-
-
-
-
-
-
 
 
 
@@ -197,13 +171,8 @@ $scope.createTable = function (oldTable){
 
 
 $scope.last = function (){
-  // var g = new tableRow (["may","apr"], "kykyky", "500", "100");
-  // var f = new makeTableRow(["gg0","gg1","gg2","gg3"],"name", "total", "CMP");
 
 
-
-
-  // $scope.table.pop();
 }
 
 
