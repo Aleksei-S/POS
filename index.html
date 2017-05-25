@@ -59,76 +59,22 @@
 		<section class = "tableKalendarnii">
 			<div class="row">
 				<div class="col-sm-8 col-sm-offset-1">
-
-
 					<table class="table table-bordered" id="tableKal" ng-click="clickTable($event)">
 						<tr>				
 						    <th rowspan="3" colspan="2"> 
 
- <div class="btn-group" role="group">
-    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      Dropdown
-    </button>
-    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-      <a class="dropdown-item" href="#">Dropdown link</a>
-      <a class="dropdown-item" href="#">Dropdown link</a>
-    </div>
-  </div>
 
-
-<div class="dropdown">
-  <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+<div class="btn-group">
+  <a class="btn btn-sm dropdown-toggle " data-toggle="dropdown" href="#">
     Кнопка
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu">
-    <!-- dropdown menu links -->
-<li><a tabindex="-1" href="#">Действие</a></li>
-    <li><a tabindex="-1" href="#">Другое действие</a></li>
-    <li><a tabindex="-1" href="#">Еще ссылка</a></li>
+    <li><a  href="#" ng-repeat="str in STRtable" ng-click="addRow(str)">{{str}}</a></li>
+    <li class="divider"></li>
+    <li><a href="#" ng-click="addRow('')"> Create Пустое</a></li>
   </ul>
 </div>
-
-
-
-
-<div class="input-group-btn">
-        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Action
-        </button>
-        <div class="dropdown-menu">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" href="#">Something else here</a>
-          <div role="separator" class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Separated link</a>
-        </div>
-    </div>
-
-
-
-<li class="dropdown">
-    <a href="#"  class="dropdown-toggle" data-toggle="dropdown" >Действие</a>
-<ul class="dropdown-menu">
-      <li><a  href="#">Другое действие</a></li>
-      <li><a  href="#">Еще ссылка</a></li>
-      <li><a  href="#">Доп. ссылка</a></li>
-</ul>
-</li>
-
-
-
-<button type="button" class="btn btn-default btn-xs" ng-click="addRow($index)"><span class="glyphicon glyphicon-triangle-bottom"></span>  Create</button> 
-						    </th>
-						  
-
-
-
-
-
-
-
-
 
 
 							<td rowspan="3">№ п/п</td>
@@ -151,22 +97,34 @@
 
 <th >	
 <br>
-<button type="button" class="btn btn-default btn-xs" ng-click="deleteRow($index)"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+<a class="btn btn-xs" ng-click="deleteRow($index)"><span class="glyphicon glyphicon-remove"></span> Delete</a>
 
 </th>
 <th >
-<button type="button" class="btn btn-default btn-xs" ng-click="switchRow($index,'up')"><span class="glyphicon glyphicon-arrow-up"></span></button> 
+<a type="button" class="btn btn-xs" ng-click="switchRow($index,'up')">
+<span class="glyphicon glyphicon-arrow-up"></span></a> 
 <br>
-<button type="button" class="btn btn-default btn-xs" ng-click="switchRow($index,'down')"><span class="glyphicon glyphicon-arrow-down"></span></button> 
+<a type="button" class="btn btn-xs" ng-click="switchRow($index,'down')">
+<span class="glyphicon glyphicon-arrow-down"></span></a> 
 </th>
+
+
+
+
 
 
 
 							<td >{{$index+1}}</td>
-							<td ng-repeat="(key, value) in Row" ng-dblclick="clickTableRow($event, Row, key, value); gg=$event.target;">{{value}}
-								<input type="text" class="form-control input-sm" id="edit" ng-model="inputValue" ng-if="showInput" ng-blur="inputTableBlur()" >
+							<td ng-repeat="(key, value) in Row" ng-dblclick="clickTableRow($event, Row, key, value); gg=$event.target;">{{valueCheck(value) ? value.first : value}}<br><span class="spantabl">{{value.second}}</span>
+								<textarea type="text" rows="2" maxlength="10" class="form-control input-sm" id="edit" ng-keypress="keybord($event)" ng-model="inputValue" ng-if="showInput" ng-blur="inputTableBlur()"></textarea>
 							</td>
 						</tr>
+
+
+
+
+
+
 
 
 					</table>

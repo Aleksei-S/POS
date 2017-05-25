@@ -7,6 +7,14 @@ var jobPos = angular.module('jobPos', []);
 jobPos.controller('PosCtrl', ['$scope', function($scope){
 
 
+
+  var numberApart = 81;
+  var numberKPD = 19;
+
+  $scope.STRtable = new Array("Подготовка территории строительства",
+    ""+numberApart+" квартирный жилой дом (КПД-"+numberKPD+")"
+    ,"Наружные сети(подключение)"
+    , "Прочие работы и лимитированные затраты", "В С Е Г О:" ); 
 $scope.dateBeginBuilding = new Date(); //дата начала строительства
 $scope.timeBuilding = new Number(); // продолжительность строительства
 $scope.table = new Array();          
@@ -17,12 +25,17 @@ $scope.arrayYearsColdspan = new Array();
 // Клик по таблице Row
 $scope.clickTableRow = function ($event, Row, key, value){
   let valueHide=value;
+ 
   this.value="";
   this.showInput = true;
   setTimeout(function () {
     var elem = document.getElementById("edit");
     elem.focus();
-    elem.value = valueHide;
+    if ($scope.valueCheck(value)) { //////////////
+      elem.value = valueHide.first + "\n" + valueHide.second;   ////////////
+    } else {
+      elem.value = valueHide;
+    }
   },100);
 };
 
@@ -31,19 +44,31 @@ $scope.clickTableRow = function ($event, Row, key, value){
 $scope.inputTableBlur = function (){
   this.inputValue = document.getElementById("edit").value;
   this.$parent.showInput = false;
-  this.$parent.$parent.Row[this.$parent.key] = this.inputValue;
-  this.$parent.value = this.inputValue;
-  //checkRow (this.$parent.$parent.Row);
-  console.log(this.$parent.$parent.Row);
-};
+
+    if ($scope.valueCheck(this.$parent.$parent.Row[this.$parent.key])) {   //////////////
+      let valElement = this.inputValue.split('\n');
+      this.$parent.$parent.Row[this.$parent.key].first = valElement[0];
+      this.$parent.$parent.Row[this.$parent.key].second = valElement[1];
+      this.$parent.value = this.$parent.$parent.Row[this.$parent.key];
+    } else {
+
+      this.$parent.$parent.Row[this.$parent.key] = this.inputValue;
+      this.$parent.value = this.inputValue;
+    }
 
 
-$scope.$watch('table', function(newValue, oldValue, scope) {
- if (newValue == oldValue) return;
-    //  console.log(newValue);
-    // console.log(scope);
-    //  console.log("scope222");
-  }, true);
+    console.log(this.$parent.$parent.Row);
+  };
+
+// $scope.keybord = function (e){
+//   if (e.charCode = 13) {
+//     console.log("fggg");
+//   }
+// };
+
+
+
+
 
 
 
@@ -66,6 +91,22 @@ $scope.$watch('table', function(newValue, oldValue, scope) {
 
 
 
+// var objValue = {
+//   fisrt:
+// };
+
+$scope.valueCheck = function (val) {
+  if(val instanceof objValue === true) {
+    return true;
+  }
+  return false;
+}
+
+function objValue (first="11", second = "11") {
+  this.first = first;
+  this.second = second;
+}
+
 
 
 
@@ -74,7 +115,7 @@ function tableRow (arr, name="", total="0", CMP="0") {
   this.total = total;
   this.CMP = CMP;
   for (var i = 0; i < arr.length; i++) {
-    this[arr[i]] = "";
+    this[arr[i]] = new objValue();
   } 
 }
 
@@ -118,8 +159,8 @@ $scope.$watchGroup(['timeBuilding', 'dateBeginBuilding'], function(newValue, old
 
 
 
-$scope.addRow = function (){
-  $scope.table.splice(0, 0, new tableRow($scope.arrayMonth));
+$scope.addRow = function (name){
+  $scope.table.splice(0, 0, new tableRow($scope.arrayMonth, name));
 };
 
 $scope.deleteRow = function (index){
@@ -150,16 +191,17 @@ if (-1 < num && num < ($scope.table.length - 1)) {
 
 $scope.createTable = function (oldTable){
   if (oldTable.length == 0) {
-   $scope.table.push(new tableRow($scope.arrayMonth));
-   $scope.table.push(new tableRow($scope.arrayMonth));
+    for (var i = 0; i < $scope.STRtable.length; i++) {
+      $scope.table.push(new tableRow($scope.arrayMonth, $scope.STRtable[i]));
+    }
   ////////////////////ПРОЦЕНТЫ////////////////////////
   let row = new tableRow($scope.arrayMonth, "Распределение капвложений по месяцам", "100%", "100%");
   $scope.table.push(row);
-  } else {
-    for (var i = 0; i < oldTable.length; i++) {
+} else {
+  for (var i = 0; i < oldTable.length; i++) {
     $scope.table.push(new tableRow($scope.arrayMonth, oldTable[i].name,oldTable[i].total,oldTable[i].CMP));
-    }
   }
+}
 }
 
 
