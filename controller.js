@@ -56,7 +56,6 @@ $scope.inputTableBlur = function (){
       this.$parent.value = this.inputValue;
     }
 
-
     console.log(this.$parent.$parent.Row);
   };
 
@@ -67,33 +66,6 @@ $scope.inputTableBlur = function (){
 // };
 
 
-
-
-
-
-
-
-// function checkRow (tablerow) {
-//   let result = tablerow.total;
-//   let num = $scope.arrayMonth.length - 1;
-//   for (var i = 0; i < num; i++) {
-//     result = result - tablerow[$scope.arrayMonth[i]];
-//   }
-
-//   tablerow[$scope.arrayMonth[num]] = result;
-
-//   console.log(result);
-//   console.log($scope.arrayMonth);
-//   console.log($scope.arrayMonth.length);
-// }
-
-
-
-
-
-// var objValue = {
-//   fisrt:
-// };
 
 $scope.valueCheck = function (val) {
   if(val instanceof objValue === true) {
@@ -115,7 +87,7 @@ function tableRow (arr, name="", total="0", CMP="0") {
   this.total = total;
   this.CMP = CMP;
   for (var i = 0; i < arr.length; i++) {
-    this[arr[i]] = new objValue();
+    this[arr[i]+i] = new objValue();
   } 
 }
 
@@ -133,6 +105,10 @@ $scope.$watchGroup(['timeBuilding', 'dateBeginBuilding'], function(newValue, old
     this.year = year;
     this.coldspan = coldspan;
   };
+  let ObjMonth = function (Month, value) {
+    this.Month = Month;
+    this.value = value;
+  };
 
   for (var i = 0; i < parseInt($scope.timeBuilding); i++) {
 
@@ -140,7 +116,8 @@ $scope.$watchGroup(['timeBuilding', 'dateBeginBuilding'], function(newValue, old
       num = 1;
     }
     timeMonth.setMonth(num++);
-    $scope.arrayMonth[i] = timeMonth.toString().substring(4,7);
+    //$scope.arrayMonth.push(timeMonth.toString().substring(4,7));
+    $scope.arrayMonth.push(new ObjMonth(timeMonth.toString().substring(4,7),(100/$scope.timeBuilding).toFixed(0)));
     let yearNext = timeMonth.toString().substring(11,15);
 
     if (Year == yearNext) {
@@ -150,8 +127,8 @@ $scope.$watchGroup(['timeBuilding', 'dateBeginBuilding'], function(newValue, old
       Year = yearNext; 
       countColdspan = 1;
     }
-
   }
+
   $scope.arrayYearsColdspan.push(new Obj(Year,countColdspan));
 
   $scope.createTable(oldTable);
@@ -159,13 +136,16 @@ $scope.$watchGroup(['timeBuilding', 'dateBeginBuilding'], function(newValue, old
 
 
 
+
 $scope.addRow = function (name){
   $scope.table.splice(0, 0, new tableRow($scope.arrayMonth, name));
 };
 
+
 $scope.deleteRow = function (index){
  $scope.table.splice(index, 1);
 };
+
 
 $scope.switchRow = function (index, str){
  let row = $scope.table[index];
@@ -187,23 +167,52 @@ if (-1 < num && num < ($scope.table.length - 1)) {
 
 
 
-
-
 $scope.createTable = function (oldTable){
   if (oldTable.length == 0) {
     for (var i = 0; i < $scope.STRtable.length; i++) {
       $scope.table.push(new tableRow($scope.arrayMonth, $scope.STRtable[i]));
     }
-  ////////////////////ПРОЦЕНТЫ////////////////////////
-  let row = new tableRow($scope.arrayMonth, "Распределение капвложений по месяцам", "100%", "100%");
-  $scope.table.push(row);
-} else {
-  for (var i = 0; i < oldTable.length; i++) {
-    $scope.table.push(new tableRow($scope.arrayMonth, oldTable[i].name,oldTable[i].total,oldTable[i].CMP));
+  } else {
+    for (var i = 0; i < oldTable.length; i++) {
+      $scope.table.push(new tableRow($scope.arrayMonth, oldTable[i].name,oldTable[i].total,oldTable[i].CMP));
+    }
   }
 }
+
+
+$scope.clickPercent = function ($event, MonthObj){
+  let valueHide = MonthObj.value;
+  this.Month.value=""; 
+  this.showInput = true;
+  setTimeout(function () {
+    var elem = document.getElementById("edit");
+    elem.focus();
+    elem.value = valueHide;
+  },100);
 }
 
+
+$scope.inputPercentBlur = function (){
+  this.$parent.showInput = false;
+  this.$parent.Month.value = document.getElementById("edit").value;
+ // this.$parent.$parent.arrayMonth)
+};
+
+
+
+// function checkRow (tablerow) {
+//   let result = tablerow.total;
+//   let num = $scope.arrayMonth.length - 1;
+//   for (var i = 0; i < num; i++) {
+//     result = result - tablerow[$scope.arrayMonth[i]];
+//   }
+
+//   tablerow[$scope.arrayMonth[num]] = result;
+
+//   console.log(result);
+//   console.log($scope.arrayMonth);
+//   console.log($scope.arrayMonth.length);
+// }
 
 
 
@@ -213,7 +222,6 @@ $scope.createTable = function (oldTable){
 
 
 $scope.last = function (){
-
 
 }
 

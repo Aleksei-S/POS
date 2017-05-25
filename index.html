@@ -66,7 +66,7 @@
 
 <div class="btn-group">
   <a class="btn btn-sm dropdown-toggle " data-toggle="dropdown" href="#">
-    Кнопка
+    Create Row
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu">
@@ -89,7 +89,7 @@
 							colspan={{years.coldspan}} ng-show="timeBuilding > 0">{{years.year}}</td>
 						</tr>
 						<tr>
-							<td ng-repeat="Month in arrayMonth track by $index">{{Month}}</td>
+							<td ng-repeat="Month in arrayMonth track by $index">{{Month.Month}}</td>
 						</tr>
 
 
@@ -100,12 +100,15 @@
 <a class="btn btn-xs" ng-click="deleteRow($index)"><span class="glyphicon glyphicon-remove"></span> Delete</a>
 
 </th>
+
 <th >
-<a type="button" class="btn btn-xs" ng-click="switchRow($index,'up')">
-<span class="glyphicon glyphicon-arrow-up"></span></a> 
-<br>
-<a type="button" class="btn btn-xs" ng-click="switchRow($index,'down')">
-<span class="glyphicon glyphicon-arrow-down"></span></a> 
+		<div class="btn-group-vertical">
+		  <a type="button" class="btn btn-xs" ng-click="switchRow($index,'up')">
+		<span class="glyphicon glyphicon-arrow-up"></span></a>
+
+		 <a type="button" class="btn btn-xs" ng-click="switchRow($index,'down')">
+		<span class="glyphicon glyphicon-arrow-down"></span></a> 
+		</div>
 </th>
 
 
@@ -115,10 +118,29 @@
 
 
 							<td >{{$index+1}}</td>
-							<td ng-repeat="(key, value) in Row" ng-dblclick="clickTableRow($event, Row, key, value); gg=$event.target;">{{valueCheck(value) ? value.first : value}}<br><span class="spantabl">{{value.second}}</span>
+							<td ng-repeat="(key, value) in Row track by $index" ng-dblclick="clickTableRow($event, Row, key, value); gg=$event.target;">{{valueCheck(value) ? value.first : value}}<br><span class="spantabl">{{value.second}}</span>
 								<textarea type="text" rows="2" maxlength="10" class="form-control input-sm" id="edit" ng-keypress="keybord($event)" ng-model="inputValue" ng-if="showInput" ng-blur="inputTableBlur()"></textarea>
 							</td>
 						</tr>
+
+
+
+<tr >
+
+ <th  colspan="2"> 
+
+</th>
+
+				<td > </td>
+				<td >Распределение капвложений по месяцам </td>
+				<td >100%</td>
+				<td >100%</td>
+				<td ng-repeat="Month in arrayMonth track by $index" ng-click="clickPercent($event, Month)" data-change="false" >{{Month.value}}
+				<input type="text" class="form-control input-sm" id="edit" ng-if="showInput" ng-blur="inputPercentBlur()" >
+				</td>
+
+	</tr>
+
 
 
 
