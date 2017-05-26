@@ -25,7 +25,7 @@ $scope.arrayYearsColdspan = new Array();
 // Клик по таблице Row
 $scope.clickTableRow = function ($event, Row, key, value){
   let valueHide=value;
- 
+
   this.value="";
   this.showInput = true;
   setTimeout(function () {
@@ -55,7 +55,7 @@ $scope.inputTableBlur = function (){
       this.$parent.$parent.Row[this.$parent.key] = this.inputValue;
       this.$parent.value = this.inputValue;
     }
-
+    checkTable ();
     console.log(this.$parent.$parent.Row);
   };
 
@@ -179,7 +179,7 @@ $scope.createTable = function (oldTable){
   }
 }
 
-
+///////////////FOR PERCENT
 $scope.clickPercent = function ($event, MonthObj){
   let valueHide = MonthObj.value;
   this.Month.value=""; 
@@ -190,31 +190,69 @@ $scope.clickPercent = function ($event, MonthObj){
     elem.value = valueHide;
   },100);
 }
-
-
 $scope.inputPercentBlur = function (){
   this.$parent.showInput = false;
   this.$parent.Month.value = document.getElementById("edit").value;
- // this.$parent.$parent.arrayMonth)
+  checkRow(this.$parent.$parent.arrayMonth);
+
 };
+function checkRow (arrayMonth) {
+  let result = 100;
+  for (var i = 0; i < arrayMonth.length-1; i++) {
+    result = result - arrayMonth[i].value;
+  }
+  arrayMonth[arrayMonth.length-1].value = result;
+}
+///////////////FOR PERCENT
 
 
 
-// function checkRow (tablerow) {
-//   let result = tablerow.total;
-//   let num = $scope.arrayMonth.length - 1;
-//   for (var i = 0; i < num; i++) {
-//     result = result - tablerow[$scope.arrayMonth[i]];
-//   }
 
-//   tablerow[$scope.arrayMonth[num]] = result;
+function checkTable () {
+  let total = "";
+  let other = "";
+  let rowArr = [];
+  for (var i = 0; i < $scope.table.length; i++) {
+    if (($scope.table[i].name).indexOf('В С Е Г О:') !== -1 ) {
+      total = $scope.table[i];
+    } else if (($scope.table[i].name).indexOf('Прочие работы') !== -1 ) {
+      other = $scope.table[i];
+    } else {
+      rowArr.push($scope.table[i]);
+    }
+  }
+  calculateOther (total, other, rowArr);
 
-//   console.log(result);
-//   console.log($scope.arrayMonth);
-//   console.log($scope.arrayMonth.length);
-// }
+  // let ff="Прочие работы Подготовка территории";
+  // console.log(ff.indexOf('Прочие работы'));
+  // console.log($scope.table);
+}
 
 
+function calculateOther (total, other, rowArr) {
+
+  for (var key in other) {
+    if (key == "name") {
+     continue;
+    }
+    checkOnNumber();
+    for (var i = 0; i < rowArr.length; i++) {
+     other[key] = total[key] - rowArr[i][key];
+    }
+  }
+}
+
+
+function checkOnNumber (val) {
+  return true;
+}
+
+
+
+//Подготовка территории 
+//жилой дом
+//сети
+//Прочие работы
 
 
 
