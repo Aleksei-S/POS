@@ -45,7 +45,7 @@
 				<div class="col-sm-6 col-sm-offset-2">
 					<label for="inputDate" class="col-sm-4 control-label">Продолжительность</label>
 					<div class="col-sm-2">
-						<input type="text" class="form-control input-sm" ng-model="timeBuilding" placeholder="мес">
+						<input type="text" class="form-control input-sm" ng-model="timeBuilding"  placeholder="мес">
 					</div>
 					<p>месяцев</p>
 				</div>
@@ -61,92 +61,284 @@
 				<div class="col-sm-8 col-sm-offset-1">
 					<table class="table table-bordered" id="tableKal" ng-click="clickTable($event)">
 						<tr>				
-						    <th rowspan="3" colspan="2" > 
+							<th rowspan="3" colspan="2" > 
 
 
-<div class="btn-group">
-  <a class="btn btn-sm dropdown-toggle " data-toggle="dropdown" href="#">
-    Create Row
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu">
-    <li><a  href="#" ng-repeat="str in STRtable" ng-click="addRow(str)">{{str}}</a></li>
-    <li class="divider"></li>
-    <li><a href="#" ng-click="addRow('')"> Create Пустое</a></li>
-  </ul>
-</div>
+								<div class="btn-group">
+									<a class="btn btn-sm dropdown-toggle " data-toggle="dropdown" href="#">
+										Create Row
+										<span class="caret"></span>
+									</a>
+									<ul class="dropdown-menu">
+										<li><a  href="#" ng-repeat="str in STRtable" ng-click="addRow(str)">{{str}}</a></li>
+										<li class="divider"></li>
+										<li><a href="#" ng-click="addRow('')"> Create Пустое</a></li>
+									</ul>
+								</div>
 
 
-							<td rowspan="3">№ п/п</td>
-							<td rowspan="3">Наименование объектов и видов работ</td>
-							<td colspan="2">Сметная стоимостьтыс. руб. (BRN)</td>
-							<td colspan={{timeBuilding}} ng-show="timeBuilding > 0">Распределение капвложений по периодам строительства</td>
-						</tr> 
-						<tr>
-							<td rowspan="2">Всего</td>
-							<td rowspan="2">СМР</td>
-							<td ng-repeat="years in arrayYearsColdspan track by $index" 
-							colspan={{years.coldspan}} ng-show="timeBuilding > 0">{{years.year}}</td>
-						</tr>
-						<tr>
-							<td ng-repeat="Month in arrayMonth track by $index">{{Month.Month}}</td>
-						</tr>
+								<td rowspan="3">№ п/п</td>
+								<td rowspan="3">Наименование объектов и видов работ</td>
+								<td colspan="2">Сметная стоимостьтыс. руб. (BRN)</td>
+								<td colspan={{timeBuildingCeil}} ng-show="timeBuilding > 0">Распределение капвложений по периодам строительства</td>
+							</tr> 
+							<tr>
+								<td rowspan="2">Всего</td>
+								<td rowspan="2">СМР</td>
+								<td ng-repeat="years in arrayYearsColdspan track by $index" 
+								colspan={{years.coldspan}} ng-show="timeBuilding > 0">{{years.year}}</td>
+							</tr>
+							<tr>
+								<td ng-repeat="Month in arrayMonth track by $index">{{Month.Month}}</td>
+							</tr>
 
 
-						<tr ng-repeat="Row in table track by $index">
+							<tr ng-repeat="Row in table track by $index">
 
-<th >	
-<br>
-<a class="btn btn-xs" ng-click="deleteRow($index)"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+								<th >	
+									<br>
+									<a class="btn btn-xs" ng-click="deleteRow($index)"><span class="glyphicon glyphicon-remove"></span> Delete</a>
 
-</th>
+								</th>
 
-<th >
-		<div class="btn-group-vertical">
-		  <a type="button" class="btn btn-xs" ng-click="switchRow($index,'up')">
-		<span class="glyphicon glyphicon-arrow-up"></span></a>
+								<th >
+									<div class="btn-group-vertical">
+										<a type="button" class="btn btn-xs" ng-click="switchRow($index,'up')">
+											<span class="glyphicon glyphicon-arrow-up"></span></a>
 
-		 <a type="button" class="btn btn-xs" ng-click="switchRow($index,'down')">
-		<span class="glyphicon glyphicon-arrow-down"></span></a> 
-		</div>
-</th>
+											<a type="button" class="btn btn-xs" ng-click="switchRow($index,'down')">
+												<span class="glyphicon glyphicon-arrow-down"></span></a> 
+											</div>
+										</th>
 
-							<td >{{$index+1}}</td>
-							<td ng-repeat="(key, value) in Row track by $index" ng-dblclick="clickTableRow($event, Row, key, value); gg=$event.target;">{{valueCheck(value) ? value.first : value}}<br><span class="spantabl">{{value.second}}</span>
-								<textarea type="text" rows="2" maxlength="10" class="form-control input-sm" id="edit" ng-keypress="keybord($event)" ng-model="inputValue" ng-if="showInput" ng-blur="inputTableBlur()"></textarea>
-							</td>
-						</tr>
+										<td >{{$index+1}}</td>
+										<td ng-repeat="(key, value) in Row track by $index" ng-dblclick="clickTableRow($event, Row, key, value); gg=$event.target;">{{valueCheck(value) ? value.first : value}}<br><span class="spantabl">{{value.second}}</span>
+											<textarea type="text" rows="2" maxlength="10" class="form-control input-sm" id="edit" ng-keypress="keybord($event)" ng-model="inputValue" ng-if="showInput" ng-blur="inputTableBlur()"></textarea>
+										</td>
+									</tr>
 
+									<tr >
+										<th  colspan="2"> 
+										</th>
 
+										<td > </td>
+										<td >Распределение капвложений по месяцам </td>
+										<td >100%</td>
+										<td >100%</td>
+										<td ng-repeat="Month in arrayMonth track by $index" ng-click="clickPercent($event, Month)" data-change="false" >{{Month.value}}
+											<input type="text" class="form-control input-sm" id="edit" ng-if="showInput" ng-blur="inputPercentBlur()" >
+										</td>
 
-<tr >
+									</tr>
 
- <th  colspan="2"> 
-
-</th>
-
-				<td > </td>
-				<td >Распределение капвложений по месяцам </td>
-				<td >100%</td>
-				<td >100%</td>
-				<td ng-repeat="Month in arrayMonth track by $index" ng-click="clickPercent($event, Month)" data-change="false" >{{Month.value}}
-				<input type="text" class="form-control input-sm" id="edit" ng-if="showInput" ng-blur="inputPercentBlur()" >
-				</td>
-
-	</tr>
-
-
-
-
+								</table>
+							</div>
+						</div>
+					</section>
 
 
 
 
 
-					</table>
-				</div>
-			</div>
-		</section>
+					<section class = "WorkTabl">
+						<div class="row">
+							<div class="col-sm-6 col-sm-offset-1">
+								<table class="table table-bordered">
+									<tr>
+										<td>Наименование</td>
+										<td >Ед.измерен.</td>
+										<td >Количество на период строительства</td>
+									</tr>
+									<tr>
+										<td >
+											Трудоемкость работ по сводному сметному расчету
+										</td>
+										<td >
+											чел-час.
+										</td>
+										<td  ng-click="showInput2 = true; clickWorkTabl($event);" >{{ObjWorkTabl.workCapacity}}
+											<input type="text" class="form-control input-sm" id="edit2" value="" ng-if="showInput2" ng-blur="inputWorkTabl($event.target.value); this.$parent.showInput2 = false;" ></td>
+										</tr>
+										<tr>
+											<td >
+												Кол-во работающих,  (Тч-час:8час:{{timeBuilding}}мес:22дн)
+											</td>
+											<td >
+												чел
+											</td>
+											<td >{{ObjWorkTabl.sumWorking()}}</td>
+										</tr>
+										<tr>
+											<td >
+												в т.ч. рабочих,
+											</td>
+											<td >
+												чел
+											</td>
+											<td >{{ObjWorkTabl.working()}}</td>
+										</tr>
+										<tr>
+											<td >
+												ИТР и МОП /15,5% от общего количества/
+											</td>
+											<td >
+												чел
+											</td>
+											<td >{{ObjWorkTabl.ITR()}}</td>
+										</tr>
+
+									</table>
+
+								</div>
+								<div class="col-sm-5">
+									<p></p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-6 col-sm-offset-1">
+									<p>-число  рабочих на объекте в наиболее многочисленную смену составляет 70% от обще-го количества, т.е. {{ObjWorkTabl.workingInTheShift()}} чел.</p>
+									<p>-число ИТР, служащих и МОП в наиболее многочисленную смену составляет 80% от их общего количества, т.е. {{ObjWorkTabl.ITRInTheShift()}} чел.</p>
+									<p>-количество работающих на объекте строителей в наиболее многочисленную смену со-ставит ({{ObjWorkTabl.workingInTheShift()}}+{{ObjWorkTabl.ITRInTheShift()}}x0,5) = {{ObjWorkTabl.sumInTheShift()}} чел. </p>
+								</div>
+							</div>
+						</section>
+
+
+
+						<section class = "Household">
+							<div class="col-sm-6 col-sm-offset-1">
+								<table class="table table-bordered">
+									<tr>
+										<td>Наименование</td>
+										<td >Норма  на 1-го работающего в максим. смену м2</td>
+										<td >Количество работающих в максимальную смену, чел.</td>
+										<td >Количество рабочих в макси-мальную смену, чел.</td>
+										<td >Общая потребность м2</td>
+									</tr>
+									<tr>
+										<td colspan="5"> 1.Административные здания.</td>
+									</tr>
+									<tr>
+										<td>Прорабская</td>
+										<td >4</td>
+										<td >{{ObjWorkTabl.ITRInTheShift()}}</td>
+										<td >-</td>
+										<td >{{(ObjWorkTabl.ITRInTheShift()*4).toFixed(2)}}</td>
+									</tr>
+									<tr>
+										<td>Диспетчерская</td>
+										<td >7</td>
+										<td >1</td>
+										<td >-</td>
+										<td >7.00</td>
+									</tr>
+									<tr>
+										<td colspan="5">II. Бытовые помещения</td>
+									</tr>
+									<tr>
+										<td>Гардеробная</td>
+										<td >0,6</td>
+										<td >-</td>
+										<td >{{ObjWorkTabl.working()}}</td>
+										<td >{{(ObjWorkTabl.working()*0.6).toFixed(2);}}</td>
+									</tr>
+									<tr>
+										<td>Душевая (1 сетка на 15 чел.)</td>
+										<td >0,287</td>
+										<td >-</td>
+										<td >{{ObjWorkTabl.workingInTheShift()}}</td>
+										<td >{{ObjWorkTabl.workingInTheShift()*0.287}}</td>
+									</tr>
+									<tr>
+										<td>Умывальная (1 кран на 20 чел.)</td>
+										<td >0,065</td>
+										<td >{{ObjWorkTabl.sumInTheShift()}}</td>
+										<td >-</td>
+										<td >{{ObjWorkTabl.sumInTheShift() * 0.065}}</td>
+									</tr>
+									<tr>
+										<td>Сушилка (не менее 4 м2)</td>
+										<td >0,15</td>
+										<td >-</td>
+										<td >{{ObjWorkTabl.workingInTheShift()}}</td>
+										<td >{{ObjWorkTabl.workingInTheShift()*0.15}}</td>
+									</tr>
+									<tr>
+										<td>Помещение для приема пищи (не менее 12 м2)</td>
+										<td >0,25</td>
+										<td >{{ObjWorkTabl.sumInTheShift()}}</td>
+										<td >-</td>
+										<td >{{ObjWorkTabl.sumInTheShift()*0.25}}</td>
+									</tr>
+									<tr>
+										<td>Помещение для обогрева рабочих(не менее 8 м2)</td>
+										<td >0,1</td>
+										<td >-</td>
+										<td >{{ObjWorkTabl.workingInTheShift()}}</td>
+										<td >{{ObjWorkTabl.workingInTheShift()*0.1}}</td>
+									</tr>
+									<tr>
+										<td>Уборная</td>
+										<td >0,1</td>
+										<td >{{ObjWorkTabl.sumInTheShift()}}</td>
+										<td >-</td>
+										<td >{{ObjWorkTabl.sumInTheShift()*0.1}}</td>
+									</tr>
+								</table>
+
+							</div>
+
+						</section>
+
+
+						<section class = "Stockroom">
+							<div class="col-sm-6 col-sm-offset-1">
+								<table class="table table-bordered">
+									<tr>
+										<td>Наименование</td>
+										<td >Норма на млн. руб. СМР,м2</td>
+										<td >Объем СМР в макс. год, тыс. руб. (BRN)</td>
+										<td >Общая потребность м2</td>
+									</tr>
+									<tr>
+										<td>Склад материально-технический отапливаемый</td>
+										<td >24,0</td>
+										<td >{{}}</td>
+										<td >{{}}</td>
+									</tr>
+									<tr>
+										<td>Склад материально-технический не отапливаемый</td>
+										<td >29,0</td>
+										<td >-"-</td>
+										<td >{{}}</td>
+									</tr>
+									<tr>
+										<td>Склад для хранения материалов (цемента, гипса, извести и т.д.)</td>
+										<td >21,2</td>
+										<td >-"-</td>
+										<td >{{}}</td>
+									</tr>
+									<tr>
+										<td>Навес</td>
+										<td >13,0</td>
+										<td >-"-</td>
+										<td >{{}}</td>
+									</tr>
+									<tr>
+										<td>Открытые площадки</td>
+										<td >300,0</td>
+										<td >-"-</td>
+										<td >{{}}</td>
+									</tr>
+
+								</table>
+							</div>
+
+						</section>
+
+
+
+					</div>
 
 
 
@@ -154,73 +346,9 @@
 
 
 
-		<div class="row">
-			<div class="col-sm-1 col-sm-offset-1">
-				<p>Hello</p>
-			</div>
-			<div class="col-sm-4">
-				<input type="text" ng-click="last($event)" name="name">
-			</div>
-			<div class="col-sm-4">
-				<p>Hello</p>
-			</div>
-		</div>
 
 
-
-		<div class="row">
-			<div class="col-sm-1 col-sm-offset-1">
-				<p>Hello</p>
-			</div>
-			<div class="col-sm-4">
-				<table class="table table-bordered">
-					<tr>
-						<td>Наименование</td>
-						<td >Ед.измерен.</td>
-						<td >Количество на период строительства</td>
-					</tr>
-					<tr>
-						<td >
-							<br>Трудоемкость работ по сводному сметному расчету
-							<br>Кол-во работающих, (Тч-час:8час:6,5мес:22дн)
-							<br>в т.ч. рабочих,
-							<br>ИТР и МОП /15,5% от общего количества/
-						</td>
-						<td >
-							<br>чел-час.
-
-
-						</td>
-						<td >64528</td>
-
-
-					</tr>
-
-				</table>
-
-			</div>
-			<div class="col-sm-4">
-				<p>Hello</p>
-			</div>
-		</div>
-
-
-
-
-
-
-
-	</div>
-
-
-
-
-
-
-
-
-
-	<script src="controller.js"></script>
-</body>
-</html>
+					<script src="controller.js"></script>
+				</body>
+				</html>
 

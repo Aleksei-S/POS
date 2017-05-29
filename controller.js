@@ -16,6 +16,7 @@ jobPos.controller('PosCtrl', ['$scope', function($scope){
     , "Прочие работы и лимитированные затраты", "В С Е Г О:" ); 
 $scope.dateBeginBuilding = new Date(); //дата начала строительства
 $scope.timeBuilding = new Number(); // продолжительность строительства
+$scope.timeBuildingCeil = new Number(); 
 $scope.table = new Array();          
 $scope.arrayMonth = new Array();      
 $scope.arrayYearsColdspan = new Array();
@@ -54,13 +55,15 @@ $scope.inputTableBlur = function (){
       this.$parent.$parent.Row[this.$parent.key] = this.inputValue;
       this.$parent.value = this.inputValue;
     }
-  watchTable(this.$parent.$parent.Row, this.$parent.key);
+    watchTable(this.$parent.$parent.Row, this.$parent.key);
     // console.log(this.$parent.$parent.Row);
   };
 
 // $scope.keybord = function (e){
+//   if (e.charCode = ",") {
+
+//   }
 //   if (e.charCode = 13) {
-//     console.log("fggg");
 //   }
 // };
 
@@ -92,6 +95,7 @@ function tableRow (arr, name="", total="0", CMP="0") {
 
 
 $scope.$watchGroup(['timeBuilding', 'dateBeginBuilding'], function(newValue, oldValue, scope) {
+  $scope.timeBuildingCeil = Math.ceil($scope.timeBuilding);
   let oldTable = $scope.table;   //save old
   $scope.arrayMonth =  Array(); //ОЧИСТИТЬ
   $scope.arrayYearsColdspan =  Array(); //ОЧИСТИТЬ
@@ -109,13 +113,14 @@ $scope.$watchGroup(['timeBuilding', 'dateBeginBuilding'], function(newValue, old
     this.value = value;
   };
 
-  for (var i = 0; i < parseInt($scope.timeBuilding); i++) {
+  for (var i = 0; i < parseInt(Math.ceil($scope.timeBuilding)); i++) {
 
     if(num == 13) {
       num = 1;
     }
     timeMonth.setMonth(num++);
-    $scope.arrayMonth.push(new ObjMonth(timeMonth.toString().substring(4,7),(100/$scope.timeBuilding).toFixed(0)));
+
+    $scope.arrayMonth.push(new ObjMonth(mapMonth[timeMonth.toString().substring(4,7)],(100/$scope.timeBuilding).toFixed(0)));
     let yearNext = timeMonth.toString().substring(11,15);
 
     if (Year == yearNext) {
@@ -132,6 +137,20 @@ $scope.$watchGroup(['timeBuilding', 'dateBeginBuilding'], function(newValue, old
   $scope.createTable(oldTable);
 });
 
+var mapMonth = {
+  "Jan" : "январь",
+  "Feb" : "февраль",
+  "Mar" : "март",
+  "Apr" : "апрель",
+  "May" : "май",
+  "Jun" : "июнь",
+  "Jul" : "июль",
+  "Aug" : "август",
+  "Sep" : "сентябрь",
+  "Oct" : "октябрь",
+  "Nov" : "ноябрь",
+  "Dec" : "декабрь"
+};
 
 
 
@@ -216,32 +235,32 @@ function watchTable(row, key) {
 
 //расчет последнего месяца
 function refreshLastValueTable (row) {
-let arr = [];
-arr = arr.concat($scope.rowCalculatePercent, $scope.rowCalculateLastMonth, $scope.rowCalculateFirstAndLastMonth);
+  let arr = [];
+  arr = arr.concat($scope.rowCalculatePercent, $scope.rowCalculateLastMonth, $scope.rowCalculateFirstAndLastMonth);
   
   if (checkRowCalculate(row, arr)) {
    calculateLastMonthTable(row);
    calculateOther ();
-  }
+ }
 }
 
 //расчет последнего месяца продолжение
 function calculateLastMonthTable (row) {
-   let result = []; 
-   let val = lastANDfirstKey(row)[1];
-   result[0] = row.total;
-   result[1] = row.CMP;
+ let result = []; 
+ let val = lastANDfirstKey(row)[1];
+ result[0] = row.total;
+ result[1] = row.CMP;
 
-    for (var key in row){
-      if (key == "name" || key == "total" || key == "CMP"  || key == val) {
-      continue; 
-      }
-      result[0] = result[0] - row[key].first;
-      result[1] = result[1] - row[key].second;
-    }
+ for (var key in row){
+  if (key == "name" || key == "total" || key == "CMP"  || key == val) {
+    continue; 
+  }
+  result[0] = result[0] - row[key].first;
+  result[1] = result[1] - row[key].second;
+}
 
-   row[val].first = result[0];
-   row[val].second = result[1];
+row[val].first = result[0];
+row[val].second = result[1];
 }
 
 
@@ -273,7 +292,7 @@ function calculateOther () {
     }
 
     for (var i = 0; i < $scope.table.length; i++){
-      
+
       if (($scope.table[i].name).indexOf('В С Е Г О:') !== -1 || ($scope.table[i].name).indexOf('Прочие работы') !== -1) {
         continue; 
       }
@@ -293,7 +312,7 @@ function calculateOther () {
       other[key].second = result[1];
     }
   }
-calculateLastMonthTable (other);
+  calculateLastMonthTable (other);
 }
 
 
@@ -334,33 +353,33 @@ function refreshTable () {
       continue;
     }
    // расчет первый месяц
-    if ($scope.table[i].total !== "0" && checkRowCalculate($scope.table[i], $scope.rowCalculateFirstMonth)) {
-      calculateFirstMonth($scope.table[i]);
-      continue;
-    }
+   if ($scope.table[i].total !== "0" && checkRowCalculate($scope.table[i], $scope.rowCalculateFirstMonth)) {
+    calculateFirstMonth($scope.table[i]);
+    continue;
+  }
     // расчет первый и последний месяц
     if ($scope.table[i].total !== "0" && checkRowCalculate($scope.table[i], $scope.rowCalculateFirstAndLastMonth)) {
       calculateFirstAndLastMonth($scope.table[i]);
       continue;
     }
   }
-calculateOther();
+  calculateOther();
 }
 
  // проценты расчет
-function calculatePercentRow (row) {
+ function calculatePercentRow (row) {
   let count = 0;
   for (var key in row) {
     if (key == "name" || key == "total" || key == "CMP") {
      continue; 
-    }
-    row[key].first = row.total * $scope.arrayMonth[count].value / 100;
-    row[key].first =+ row[key].first.toFixed(2);
+   }
+   row[key].first = row.total * $scope.arrayMonth[count].value / 100;
+   row[key].first =+ row[key].first.toFixed(2);
 
-    row[key].second = row.CMP * $scope.arrayMonth[count].value / 100;
-    row[key].second =+ row[key].second.toFixed(2);
-    count++;
-  } 
+   row[key].second = row.CMP * $scope.arrayMonth[count].value / 100;
+   row[key].second =+ row[key].second.toFixed(2);
+   count++;
+ } 
 }
 
 // расчет последний месяц
@@ -388,18 +407,18 @@ function calculateFirstAndLastMonth (row) {
 
 
 function lastANDfirstKey(row){
-let keys = new Array(2)
-let valFirst = "";
-let valLast = "";
+  let keys = new Array(2)
+  let valFirst = "";
+  let valLast = "";
   for (var key in row) {
     if ($scope.valueCheck(row[key]) && valFirst == "") {
       valFirst = key;
     } 
-     valLast = key;
+    valLast = key;
   } 
   keys[0] = valFirst;
   keys[1] = valLast;
-return keys;
+  return keys;
 }
 
 
@@ -427,16 +446,74 @@ return keys;
 
 
 
+////////////////////////////////////////////////WORK TABLE//////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////WORK TABLE//////////////////////////////////////////
+
+
+function WorkTabl (workCapacity) {
+  return{
+    workCapacity : workCapacity,
+    sumWorking : function () {
+      if (workCapacity == "" || $scope.timeBuilding == "") {return "";}
+      return Math.ceil(this.workCapacity / 8 / 22 / $scope.timeBuilding); //8час: X мес:22дн
+    },
+    ITR : function () {
+      if (workCapacity == "" || $scope.timeBuilding == "") {return "";}
+      return Math.ceil(this.sumWorking() * 0.155); //15,5% 
+    },
+    working : function () {
+      if (workCapacity == "" || $scope.timeBuilding == "") {return "";}
+      return this.sumWorking() - this.ITR(); //8час: X мес:22дн
+    },
+    workingInTheShift : function () {
+      return Math.ceil(this.working() * 0.7); // в т.ч. рабочих * 70 %
+    },
+    ITRInTheShift : function () {
+      return  Math.ceil(this.ITR() * 0.8); // ИТР * 80% 
+    },
+    sumInTheShift : function () {
+      return  Math.ceil(this.workingInTheShift() + this.ITRInTheShift() * 0.5); // (34+7x0,5) = 38 чел 
+    }
+  }
+};
+
+$scope.ObjWorkTabl = WorkTabl("");
+
+$scope.clickWorkTabl = function (event){
+  setTimeout(function () {
+    var elem = document.getElementById("edit2");
+    elem.focus();
+    elem.value = $scope.ObjWorkTabl.workCapacity;
+  },100);
+};
+
+$scope.inputWorkTabl = function (value){
+ $scope.ObjWorkTabl =  WorkTabl(value);
+};
 
 
 
 
+// <td   showInput2 = true;" >{{WorkTabl.value}}
+// <input type="text" class="form-control input-sm" id="edit2" ng-if="showInput2" 
+// ng-blur="inputWorkTabl(); showInput2 = false;" ></td>
 
 
+// $scope.inputPercentBlur = function (){
+//   this.$parent.showInput = false;
+//   this.$parent.Month.value = document.getElementById("edit").value;
+//   checkRowPercent(this.$parent.$parent.arrayMonth);
+//   refreshTable ();
+// };
 
-$scope.last = function (){
-
-}
+// function checkRowPercent (arrayMonth) {
+//   let result = 100;
+//   for (var i = 0; i < arrayMonth.length-1; i++) {
+//     result = result - arrayMonth[i].value;
+//   }
+//   arrayMonth[arrayMonth.length-1].value = result;
+// }
 
 
 
