@@ -22,6 +22,8 @@ $scope.arrayMonth = new Array();
 $scope.arrayYearsColdspan = new Array();
 
 
+
+
 // Клик по таблице Row
 $scope.clickTableRow = function ($event, Row, key, value){
   let valueHide=value;
@@ -283,7 +285,6 @@ function calculateOther () {
     if (key == "name") {
       continue; 
     }
-
     if (key == "total" || key == "CMP") {
       result[0] = totalRow[key];
     } else {
@@ -296,7 +297,6 @@ function calculateOther () {
       if (($scope.table[i].name).indexOf('В С Е Г О:') !== -1 || ($scope.table[i].name).indexOf('Прочие работы') !== -1) {
         continue; 
       }
-      
       if (key == "total" || key == "CMP") {
         result[0] = result[0] - $scope.table[i][key];
       } else {
@@ -445,7 +445,6 @@ function lastANDfirstKey(row){
 // }
 
 
-
 ////////////////////////////////////////////////WORK TABLE//////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////WORK TABLE//////////////////////////////////////////
@@ -476,7 +475,7 @@ function WorkTabl (workCapacity) {
       return  Math.ceil(this.workingInTheShift() + this.ITRInTheShift() * 0.5); // (34+7x0,5) = 38 чел 
     }
   }
-};
+}
 
 $scope.ObjWorkTabl = WorkTabl("");
 
@@ -494,28 +493,140 @@ $scope.inputWorkTabl = function (value){
 
 
 
+////////////////////////////////////////////////Resources TABLE//////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////Resources TABLE//////////////////////////////////////////
 
-// <td   showInput2 = true;" >{{WorkTabl.value}}
-// <input type="text" class="form-control input-sm" id="edit2" ng-if="showInput2" 
-// ng-blur="inputWorkTabl(); showInput2 = false;" ></td>
+$scope.coefficient = new Number(); // 2,7 (84год) х 1267(91год) х0,70842 (текущий)
+$scope.ResourcesTablSumma = [];
 
-
-// $scope.inputPercentBlur = function (){
-//   this.$parent.showInput = false;
-//   this.$parent.Month.value = document.getElementById("edit").value;
-//   checkRowPercent(this.$parent.$parent.arrayMonth);
-//   refreshTable ();
-// };
-
-// function checkRowPercent (arrayMonth) {
-//   let result = 100;
-//   for (var i = 0; i < arrayMonth.length-1; i++) {
-//     result = result - arrayMonth[i].value;
-//   }
-//   arrayMonth[arrayMonth.length-1].value = result;
-// }
+$scope.$watch('coefficient', function(newValue, oldValue, scope) {
+ watchCoefficient();
+});
 
 
+
+///  CMP / 2.7*1267*0.70842 * 
+
+function watchCoefficient () {
+
+  //$scope.ResourcesTablSumma = ResourcesTablSumma();
+  // if ($scope.ResourcesTablSumma.length > 1) {
+
+  // }
+// && $scope.table[$scope.table.length-1].CMP > 0
+  //if ($scope.timeBuildingCeil > 0 && $scope.coefficient > 0) {
+    for (var i = 0; i < ResourcesTablSumma().length; i++) {
+;
+     $scope.ResourcesTablSumma.push(new ResourcesTabl( ResourcesTablSumma()[i]));
+    }
+  //}
+
+
+}
+
+
+ // function ResourcesOBJ(arrSumm) {
+   
+ // }
+
+
+  // let ObjMonth = function (Month, value) {
+  //   this.Month = Month;
+  //   this.value = value;
+  // };
+
+
+
+ function ResourcesTablSumma() {
+  let rezult = [];
+  let count = 0;
+  let i = 0;
+  let row = $scope.table[$scope.table.length-1]; //if (($scope.table[i].name).indexOf('В С Е Г О:') !== -1) {
+  let summa = 0;
+    for (var key in row) {
+      if ($scope.valueCheck(row[key])) {
+        let month = $scope.arrayYearsColdspan[i].coldspan;
+        count ++;
+        summa = summa + row[key].second;
+        if (count == month) {
+          count = 0;
+          i ++;
+          rezult.push(summa);
+          summa = 0;
+        }
+
+      }
+    }
+    return rezult;
+  }
+
+
+
+
+
+
+
+function ResourcesTabl (summa) {
+     this.electric = function (summa) {
+       if (summa <  0.750) {
+         return "205";
+       } else if (0.749 < summa < 1.250) {
+         return "185";
+       } else if (1.249 < summa < 1.750) {
+         return "140";
+       } else if (1.749 < summa < 2.250) {
+         return "100";
+       } else if (2.249 < summa) {
+         return "70";
+       }};
+    this.oil = function (summa) {
+      if (summa <  0.750) {
+        return "97";
+      } else if (0.749 < summa < 1.250) {
+        return "69";
+      } else if (1.249 < summa < 1.750) {
+        return "52";
+      } else if (1.749 < summa < 2.250) {
+        return "44";
+      } else if (2.249 < summa) {
+        return "40";
+      }};
+    this.vapor = function (summa) {
+      if (summa <  0.750) {
+        return "200";
+      } else if (0.749 < summa < 1.250) {
+        return "185";
+      } else if (1.249 < summa < 1.750) {
+        return "160";
+      } else if (1.749 < summa < 2.250) {
+        return "140";
+      } else if (2.249 < summa) {
+        return "130";
+      }};
+    this.compresAir = function (summa) {
+      if (summa <  0.750) {
+        return "3.9";
+      } else if (0.749 < summa < 1.750) {
+        return "3.2";
+      } else if (1.749 < summa) {
+        return "2.6";
+      }};
+    this.waterHouse = function (summa) {
+      if (summa <  0.750) {
+        return "0.3";
+      } else if (0.749 < summa < 1.250) {
+        return "0.23";
+      } else if (1.249 < summa < 1.750) {
+        return "0.2";
+      } else if (1.749 < summa ) {
+        return "0.16";
+      }};
+    this.oxyden = function (summa) {
+        return "4400";
+      };
+
+}
 
 
 
@@ -526,7 +637,52 @@ $scope.inputWorkTabl = function (value){
 }]);
 
 
-
+  // if (summa < 0.750) {
+  //   return{           ///// 0.5
+  //     electric : "205",
+  //     oil : "97",
+  //     vapor : "200",
+  //     compresAir : "3.9",
+  //     waterHouse : "0.3",
+  //     oxyden : "4400"
+  //   }
+  // } else if (0.749 < summa < 1.250) {
+  //   return{           ///// 1
+  //     electric : "185",
+  //     oil : "69",
+  //     vapor : "185",
+  //     compresAir : "3.2",
+  //     waterHouse : "0.23",
+  //     oxyden : "4400"
+  //   }
+  // } else if (1.249 < summa < 1.750) {
+  //   return{           ///// 1.5
+  //     electric : "140",
+  //     oil : "52",
+  //     vapor : "160",
+  //     compresAir : "3.2",
+  //     waterHouse : "0.2",
+  //     oxyden : "4400"
+  //   }
+  // } else if (1.749 < summa < 2.250) {
+  //   return{           ///// 2
+  //     electric : "100",
+  //     oil : "44",
+  //     vapor : "140",
+  //     compresAir : "2.6",
+  //     waterHouse : "0.16",
+  //     oxyden : "4400"
+  //     }
+  // } else if (2.249 < summa) {
+  //   return{           ///// 2
+  //     electric : "70",
+  //     oil : "40",
+  //     vapor : "130",
+  //     compresAir : "2.6",
+  //     waterHouse : "0.16",
+  //     oxyden : "4400"
+  //     }
+  // }
 
 
 
