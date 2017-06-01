@@ -26,10 +26,17 @@ body .inputData .row .col-sm-6 textarea {
 }
 body table {
   font: Trebuchet MS;
+  padding: 0px;
   border-left: none!important;
   border-bottom: none!important;
   border-top: none!important;
   border-right: none!important;
+}
+body a:hover {
+  background: #f3bd48;
+  /* Цвет фона при наведении */
+  color: #fff;
+  /* Цвет текста при наведении */
 }
 body th {
   color: red;
@@ -38,17 +45,6 @@ body th {
   border-top: none!important;
   border-right: none!important;
 }
-
 body .tableKalendarnii {
-  padding-top: 30px;
-}
-
-.spantabl {
-color: red;
-}
-
-a:hover {
-  background-color: #e6e6e6; 
-  color:  #FF4500;
-  text-shadow: 0 0 1px  #FF4500;
+  padding-top: 0px;
 }

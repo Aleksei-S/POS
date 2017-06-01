@@ -83,9 +83,6 @@ function objValue (first="0", second = "0") {
   this.second = second;
 }
 
-
-
-
 function tableRow (arr, name="", total="0", CMP="0") {
   this.name = name;
   this.total = total;
@@ -94,7 +91,6 @@ function tableRow (arr, name="", total="0", CMP="0") {
     this[arr[i]+i] = new objValue();
   } 
 }
-
 
 $scope.$watchGroup(['timeBuilding', 'dateBeginBuilding'], function(newValue, oldValue, scope) {
   $scope.timeBuildingCeil = Math.ceil($scope.timeBuilding);
@@ -154,17 +150,13 @@ var mapMonth = {
   "Dec" : "декабрь"
 };
 
-
-
 $scope.addRow = function (name){
   $scope.table.splice(0, 0, new tableRow($scope.arrayMonth, name));
 };
 
-
 $scope.deleteRow = function (index){
  $scope.table.splice(index, 1);
 };
-
 
 $scope.switchRow = function (index, str){
  let row = $scope.table[index];
@@ -172,17 +164,15 @@ $scope.switchRow = function (index, str){
 
  if (str == "up") {
   num = index - 1;
-} else {
+  } else {
   num = index + 1;
-}
+  }
 
-if (-1 < num && num < ($scope.table.length)) {
+  if (-1 < num && num < ($scope.table.length)) {
   $scope.table.splice(index, 1,  $scope.table[num]);
   $scope.table.splice(num, 1,  row);
-}
-
+  }
 };
-
 
 $scope.createTable = function (oldTable){
   if (oldTable.length == 0) {
@@ -233,6 +223,7 @@ function watchTable(row, key) {
   } else {
     refreshLastValueTable (row);
   }
+  watchCoefficient (); //// для коэфициента 2,7*1267*....
 }
 
 //расчет последнего месяца
@@ -264,7 +255,6 @@ function calculateLastMonthTable (row) {
 row[val].first = result[0];
 row[val].second = result[1];
 }
-
 
 function calculateOther () {
   let other;
@@ -498,134 +488,107 @@ $scope.inputWorkTabl = function (value){
 ////////////////////////////////////////////////Resources TABLE//////////////////////////////////////////
 
 $scope.coefficient = new Number(); // 2,7 (84год) х 1267(91год) х0,70842 (текущий)
-$scope.ResourcesTablSumma = [];
+$scope.ResourcesTablar = [];
+$scope.ResourcesVisible = true;
+$scope.maxSummaYear = new Number(); 
 
-$scope.$watch('coefficient', function(newValue, oldValue, scope) {
- watchCoefficient();
+$scope.$watchGroup(['timeBuilding', 'dateBeginBuilding', 'coefficient'], function(newValue, oldValue, scope) {
+  if ($scope.timeBuilding == 0 || $scope.coefficient == 0) {return;}
+  watchCoefficient();
+  if (1 < ResourcesTablSumma().length ) {
+    $scope.ResourcesVisible = false;
+  } else {
+    $scope.ResourcesVisible = true;
+  }
 });
 
-
-
-///  CMP / 2.7*1267*0.70842 * 
-
 function watchCoefficient () {
-
-  //$scope.ResourcesTablSumma = ResourcesTablSumma();
-  // if ($scope.ResourcesTablSumma.length > 1) {
-
-  // }
-// && $scope.table[$scope.table.length-1].CMP > 0
-  //if ($scope.timeBuildingCeil > 0 && $scope.coefficient > 0) {
-    for (var i = 0; i < ResourcesTablSumma().length; i++) {
-;
-     $scope.ResourcesTablSumma.push(new ResourcesTabl( ResourcesTablSumma()[i]));
-    }
-  //}
-
-
+  $scope.ResourcesTablar = [];
+  for (var i = 0; i < ResourcesTablSumma().length; i++) {
+    $scope.ResourcesTablar.push(new ResourcesOBJcreate( ResourcesTablSumma()[i]));
+  }
+  $scope.maxSummaYear = Math.max(...ResourcesTablSumma());
 }
 
-
- // function ResourcesOBJ(arrSumm) {
-   
- // }
-
-
-  // let ObjMonth = function (Month, value) {
-  //   this.Month = Month;
-  //   this.value = value;
-  // };
-
-
-
- function ResourcesTablSumma() {
+function ResourcesTablSumma() {
   let rezult = [];
   let count = 0;
   let i = 0;
-  let row = $scope.table[$scope.table.length-1]; //if (($scope.table[i].name).indexOf('В С Е Г О:') !== -1) {
-  let summa = 0;
-    for (var key in row) {
-      if ($scope.valueCheck(row[key])) {
-        let month = $scope.arrayYearsColdspan[i].coldspan;
-        count ++;
-        summa = summa + row[key].second;
-        if (count == month) {
-          count = 0;
-          i ++;
-          rezult.push(summa);
-          summa = 0;
-        }
+    let row = $scope.table[$scope.table.length-1]; //if (($scope.table[i].name).indexOf('В С Е Г О:') !== -1) {
+      let summa = 0;
+      for (var key in row) {
+        if ($scope.valueCheck(row[key])) {
+          let month = $scope.arrayYearsColdspan[i].coldspan;
+          count ++;
+          summa = summa + row[key].second;
+          if (count == month) {
+            count = 0;
+            i ++;
+            rezult.push(summa);
+            summa = 0;
+          }
 
+        }
       }
-    }
-    return rezult;
+  return rezult;
+}
+
+
+
+function ResourcesOBJcreate (summa ) {
+  let electric;
+  let oil;
+  let vapor;
+  let compresAir;
+  let waterHouse;
+  let oxyden;
+  let summaPlusCoef = summa / (2.7 * 1267 * $scope.coefficient);
+  if (summaPlusCoef < 0.750) {
+    electric = "205";
+    oil = "97";
+    vapor = "200";
+    compresAir = "3.9";
+    waterHouse = "0.3";
+    oxyden = "4400";
+  } else if (0.749 < summaPlusCoef && summaPlusCoef < 1.250) {
+    electric = "185";
+    oil = "69";
+    vapor = "185";
+    compresAir = "3.2";
+    waterHouse = "0.23";
+    oxyden = "4400";
+  } else if (1.249 < summaPlusCoef && summaPlusCoef < 1.750) {
+    electric = "140";
+    oil = "52";
+    vapor = "160";
+    compresAir = "3.2";
+    waterHouse = "0.2";
+    oxyden = "4400";
+  } else if (1.749 < summaPlusCoef && summaPlusCoef < 2.250) {
+    electric = "100";
+    oil = "44";
+    vapor = "140";
+    compresAir = "2.6";
+    waterHouse = "0.16";
+    oxyden = "4400";
+  } else if (2.249 < summaPlusCoef) {
+    electric = "70";
+    oil = "40";
+    vapor = "130";
+    compresAir = "2.6";
+    waterHouse = "0.16";
+    oxyden = "4400";
   }
 
-
-
-
-
-
-
-function ResourcesTabl (summa) {
-     this.electric = function (summa) {
-       if (summa <  0.750) {
-         return "205";
-       } else if (0.749 < summa < 1.250) {
-         return "185";
-       } else if (1.249 < summa < 1.750) {
-         return "140";
-       } else if (1.749 < summa < 2.250) {
-         return "100";
-       } else if (2.249 < summa) {
-         return "70";
-       }};
-    this.oil = function (summa) {
-      if (summa <  0.750) {
-        return "97";
-      } else if (0.749 < summa < 1.250) {
-        return "69";
-      } else if (1.249 < summa < 1.750) {
-        return "52";
-      } else if (1.749 < summa < 2.250) {
-        return "44";
-      } else if (2.249 < summa) {
-        return "40";
-      }};
-    this.vapor = function (summa) {
-      if (summa <  0.750) {
-        return "200";
-      } else if (0.749 < summa < 1.250) {
-        return "185";
-      } else if (1.249 < summa < 1.750) {
-        return "160";
-      } else if (1.749 < summa < 2.250) {
-        return "140";
-      } else if (2.249 < summa) {
-        return "130";
-      }};
-    this.compresAir = function (summa) {
-      if (summa <  0.750) {
-        return "3.9";
-      } else if (0.749 < summa < 1.750) {
-        return "3.2";
-      } else if (1.749 < summa) {
-        return "2.6";
-      }};
-    this.waterHouse = function (summa) {
-      if (summa <  0.750) {
-        return "0.3";
-      } else if (0.749 < summa < 1.250) {
-        return "0.23";
-      } else if (1.249 < summa < 1.750) {
-        return "0.2";
-      } else if (1.749 < summa ) {
-        return "0.16";
-      }};
-    this.oxyden = function (summa) {
-        return "4400";
-      };
-
+  return{
+    summa : summa,
+    electric : electric,
+    oil : oil,
+    vapor : vapor,
+    compresAir : compresAir,
+    waterHouse : waterHouse,
+    oxyden : oxyden
+  }
 }
 
 
@@ -634,57 +597,7 @@ function ResourcesTabl (summa) {
 
 
 
-}]);
-
-
-  // if (summa < 0.750) {
-  //   return{           ///// 0.5
-  //     electric : "205",
-  //     oil : "97",
-  //     vapor : "200",
-  //     compresAir : "3.9",
-  //     waterHouse : "0.3",
-  //     oxyden : "4400"
-  //   }
-  // } else if (0.749 < summa < 1.250) {
-  //   return{           ///// 1
-  //     electric : "185",
-  //     oil : "69",
-  //     vapor : "185",
-  //     compresAir : "3.2",
-  //     waterHouse : "0.23",
-  //     oxyden : "4400"
-  //   }
-  // } else if (1.249 < summa < 1.750) {
-  //   return{           ///// 1.5
-  //     electric : "140",
-  //     oil : "52",
-  //     vapor : "160",
-  //     compresAir : "3.2",
-  //     waterHouse : "0.2",
-  //     oxyden : "4400"
-  //   }
-  // } else if (1.749 < summa < 2.250) {
-  //   return{           ///// 2
-  //     electric : "100",
-  //     oil : "44",
-  //     vapor : "140",
-  //     compresAir : "2.6",
-  //     waterHouse : "0.16",
-  //     oxyden : "4400"
-  //     }
-  // } else if (2.249 < summa) {
-  //   return{           ///// 2
-  //     electric : "70",
-  //     oil : "40",
-  //     vapor : "130",
-  //     compresAir : "2.6",
-  //     waterHouse : "0.16",
-  //     oxyden : "4400"
-  //     }
-  // }
-
-
+  }]);
 
 
 
