@@ -4,7 +4,7 @@
 @gg:green;
 
 body {
-
+padding-top: 20px;
 	.nopadding {
 		padding:0!important;
 		margin:0!important;
@@ -12,15 +12,24 @@ body {
 
 	font-family:@font; 
 
-	.table-hover > tbody > tr:hover {
+		.table-hover > tbody > tr:hover {
 		background-color: #E5E5E5;
+		border-color: #BC1414!important;
 	}
 
 
 	table{
 		border: none!important;
+		border-color: #BC1414!important;
 		th{
+			padding:0!important;
+			margin:0!important;
 			border: none!important;
+			a{
+			color: #CCCCCC;
+			padding:0!important;
+			margin:0!important;
+			}
 		}
 		td.tdLeft{
 			text-align: left;
@@ -33,48 +42,11 @@ body {
 			max-width:20px; 
 			width: 20px;
 		}
-
-
 	}
 
-
-
-
-
-
-
-
-
-	/*padding: 30px;
-	.inputData{
-		background-color: @gg;
-		.row{
-			.col-sm-6{
-				padding-left: 2px;
-				padding-right: 2px;
-				p{
-					text-align: left;
-					vertical-align: 0px;
-					padding-top: 8px; 
-				}
-				label{
-					padding-top: 8px;
-				}
-				input{
-					margin:3px;
-				}
-				textarea{
-					margin:3px;
-				}
-			}
-		}
-		}*/
-
-
-
 		a:hover {
-			background: #f3bd48; /* Цвет фона при наведении */
 			color: #FE97F; /* Цвет текста при наведении */
+			text-shadow: 2px 2px 2px rgba(0,0,0,0.4);
 		}
 
 

@@ -6,8 +6,8 @@ var jobPos = angular.module('jobPos', []);
 
 jobPos.controller('PosCtrl', ['$scope', function($scope){
 
-  $scope.numberApart = 81;
-  $scope.numberKPD = 19;
+  $scope.numberApart = 0;
+  $scope.numberKPD = 0;
 
   $scope.STRtable = new Array("Подготовка территории строительства",
     ""+$scope.numberApart+" квартирный жилой дом (КПД-"+$scope.numberKPD+")"
@@ -20,6 +20,23 @@ $scope.timeBuildingCeil = new Number();
 $scope.table = new Array();          
 $scope.arrayMonth = new Array();      
 $scope.arrayYearsColdspan = new Array();
+
+//выход из инпута
+$scope.namePos = function(e){
+ console.log(e.target.value);
+console.log(e.target.value.indexOf('Прочие работы'));
+
+ // if (/[0-9]|\./.test(value)) 
+  $scope.numberApart = 0;
+  $scope.numberKPD = 0;
+}
+
+
+
+
+
+
+
 
 
 
