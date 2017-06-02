@@ -5,10 +5,47 @@
 
 body {
 
-
+	.nopadding {
+		padding:0!important;
+		margin:0!important;
+	}
 
 	font-family:@font; 
-	padding: 30px;
+
+	.table-hover > tbody > tr:hover {
+		background-color: #E5E5E5;
+	}
+
+
+	table{
+		border: none!important;
+		th{
+			border: none!important;
+		}
+		td.tdLeft{
+			text-align: left;
+		}
+		td{
+			text-align: center;
+			vertical-align: middle !important;
+		}
+		input{
+			max-width:20px; 
+			width: 20px;
+		}
+
+
+	}
+
+
+
+
+
+
+
+
+
+	/*padding: 30px;
 	.inputData{
 		background-color: @gg;
 		.row{
@@ -31,42 +68,74 @@ body {
 				}
 			}
 		}
-	}
-
-	table  {
-		font: @font;
-		padding: 0px;
-		border-left: none!important;
-		border-bottom: none!important;
-		border-top: none!important;
-		border-right: none!important;
-	}		
+		}*/
 
 
- a:hover {
-    background: #f3bd48; /* Цвет фона при наведении */
-    color: #fff; /* Цвет текста при наведении */
-   }
+
+		a:hover {
+			background: #f3bd48; /* Цвет фона при наведении */
+			color: #FE97F; /* Цвет текста при наведении */
+		}
 
 
-	th  {
-		color: red;
-		border-left: none!important;
-		border-bottom: none!important;
-		border-top: none!important;
-		border-right: none!important;
+
+
+
+
+		.tableKalendarnii{
+			padding-top: 0px;
+		}
+
+
+
+
 	}
 
 
+	/*--------------ШРИФТЫ-------------*/
 
 
-	.tableKalendarnii{
-		padding-top: 0px;
+	/*.nopadding {
+		padding:0!important;
+		margin:0!important;
+	}
+
+
+	table{
+
+		border: none!important;
+		th{
+			border: none!important;
+		}
+		th:hover {
+
+			color: none!important;
+		}
+		
+		td{
+			text-align: center;
+			vertical-align: middle !important;
+			.tdLeft {
+				text-align: left;
+			}
+
+
+		}
+		input{
+			width: 20px;
+		}
 	}
 
 
 
+	a:hover {
+		background: #f3bd48; /* Цвет фона при наведении 
+		Цвет текста при наведении */
 
-}
+
+
+
+
+
 
 

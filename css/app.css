@@ -1,49 +1,60 @@
 /*--------------ШРИФТЫ-------------*/
 body {
   font-family: Trebuchet MS;
-  padding: 30px;
+  /*padding: 30px;
+	.inputData{
+		background-color: @gg;
+		.row{
+			.col-sm-6{
+				padding-left: 2px;
+				padding-right: 2px;
+				p{
+					text-align: left;
+					vertical-align: 0px;
+					padding-top: 8px; 
+				}
+				label{
+					padding-top: 8px;
+				}
+				input{
+					margin:3px;
+				}
+				textarea{
+					margin:3px;
+				}
+			}
+		}
+		}*/
 }
-body .inputData {
-  background-color: green;
+body .nopadding {
+  padding: 0!important;
+  margin: 0!important;
 }
-body .inputData .row .col-sm-6 {
-  padding-left: 2px;
-  padding-right: 2px;
-}
-body .inputData .row .col-sm-6 p {
-  text-align: left;
-  vertical-align: 0px;
-  padding-top: 8px;
-}
-body .inputData .row .col-sm-6 label {
-  padding-top: 8px;
-}
-body .inputData .row .col-sm-6 input {
-  margin: 3px;
-}
-body .inputData .row .col-sm-6 textarea {
-  margin: 3px;
+body .table-hover > tbody > tr:hover {
+  background-color: #E5E5E5;
 }
 body table {
-  font: Trebuchet MS;
-  padding: 0px;
-  border-left: none!important;
-  border-bottom: none!important;
-  border-top: none!important;
-  border-right: none!important;
+  border: none!important;
+}
+body table th {
+  border: none!important;
+}
+body table td.tdLeft {
+  text-align: left;
+}
+body table td {
+  text-align: center;
+  vertical-align: middle !important;
+}
+body table input {
+  max-width: 20px;
+  width: 20px;
 }
 body a:hover {
   background: #f3bd48;
   /* Цвет фона при наведении */
-  color: #fff;
+  color: #FE97F;
   /* Цвет текста при наведении */
-}
-body th {
-  color: red;
-  border-left: none!important;
-  border-bottom: none!important;
-  border-top: none!important;
-  border-right: none!important;
 }
 body .tableKalendarnii {
   padding-top: 0px;
